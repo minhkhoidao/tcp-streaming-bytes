@@ -33,7 +33,9 @@ func handleRequest(conn net.Conn) {
 	reader := bufio.NewReader(conn)
 
 	var buffer []byte
-	tempBuf := make([]byte, 480000)
+	tempBuf := make([]byte, 1024)
+
+	var arr []int16
 
 	for {
 		n, err := reader.Read(tempBuf)
@@ -47,10 +49,14 @@ func handleRequest(conn net.Conn) {
 
 		// Print the data and reset the buffer
 		if len(int16Data) > 0 {
-			fmt.Printf("Received: %v\n", int16Data)
+			// fmt.Printf("Received: %v\n", int16Data)
+			arr = append(arr, int16Data...)
 			buffer = buffer[len(int16Data)*2:]
 		}
+		fmt.Printf("Final: %v\n", arr)
+
 	}
+
 }
 
 func bytesToInt16(b []byte) []int16 {
